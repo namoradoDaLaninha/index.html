@@ -1,0 +1,2513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Princesa ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+        :root {
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --card-black: #111111;
+            --accent-red: #ff0040;
+            --deep-red: #cc0033;
+            --dark-red: #990026;
+            --neon-red: #ff1744;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --white: #ffffff;
+            --glass-bg: rgba(17, 17, 17, 0.8);
+            --glass-border: rgba(255, 0, 64, 0.3);
+
+            /* Variável para o nome - MUDE AQUI! */
+            --girlfriend-name: "Laninha"; /* ← COLOQUE O NOME AQUI */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000; /* fallback */
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            cursor: auto;
+        }
+        @media (pointer: fine) {
+            body { cursor: none; }
+        }
+
+        /* =========================
+           VÍDEO DE FUNDO
+        ========================= */
+        .bg-video {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(0.55) contrast(1.15) saturate(1.05);
+        }
+        .video-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.20), rgba(0,0,0,0.80));
+        }
+
+        /* =========================
+           INTRO MODAL (janela) + progresso
+        ========================= */
+        .intro {
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            display: grid;
+            place-items: center;
+            background: rgba(0,0,0,0.70);
+            backdrop-filter: blur(10px);
+            transition: opacity .55s ease;
+        }
+        .intro.hide { opacity: 0; }
+
+        .intro-box {
+            width: min(920px, 92vw);
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(255,0,64,0.35);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.75), 0 0 35px rgba(255,0,64,0.18);
+            background: rgba(10,10,10,0.65);
+        }
+        .intro-title {
+            padding: 16px 18px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.15rem;
+            background: linear-gradient(45deg, var(--accent-red), var(--gold), var(--neon-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .intro video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: min(70vh, 520px);
+            object-fit: cover;
+            filter: brightness(0.95) contrast(1.07);
+        }
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.12);
+        }
+        .progress span {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-red), var(--gold));
+            transition: width .08s linear;
+        }
+        .intro-ui {
+            display: flex;
+            gap: 12px;
+            padding: 14px 14px 18px;
+            justify-content: center;
+            background: rgba(0,0,0,0.55);
+        }
+        .intro-ui button {
+            padding: 14px 22px;
+            border-radius: 999px;
+            border: 2px solid rgba(255,0,64,0.85);
+            background: rgba(0,0,0,0.35);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .intro-ui button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 22px rgba(255,0,64,0.55);
+        }
+
+        /* Cursor personalizado dark (só desktop/mouse) */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, var(--accent-red), var(--deep-red));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            box-shadow: 0 0 20px var(--accent-red);
+            border: 2px solid var(--neon-red);
+            display: none;
+        }
+        .cursor-trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 0, 64, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            display: none;
+        }
+        @media (pointer: fine) {
+            .custom-cursor, .cursor-trail { display: block; }
+        }
+
+        /* Partículas vermelhas */
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, var(--accent-red), transparent);
+            border-radius: 50%;
+            animation: float-particle 8s linear infinite;
+        }
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Efeito de ondas dark */
+        .wave-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(204, 0, 51, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(153, 0, 38, 0.1) 0%, transparent 50%);
+            animation: wave-move 10s ease-in-out infinite;
+            z-index: 3;
+        }
+        @keyframes wave-move {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(3deg); }
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            animation: slideDown 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-red), var(--gold), var(--accent-red));
+            border-radius: 2px;
+            animation: glow-line 3s ease-in-out infinite alternate;
+        }
+        @keyframes glow-line {
+            0% { box-shadow: 0 0 5px var(--accent-red); }
+            100% { box-shadow: 0 0 25px var(--accent-red), 0 0 35px var(--neon-red); }
+        }
+        .header h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--accent-red), var(--gold), var(--neon-red), var(--silver));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 4s ease infinite, text-glow 2s ease-in-out infinite alternate;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes text-glow {
+            0% { filter: drop-shadow(0 0 10px var(--accent-red)); }
+            100% { filter: drop-shadow(0 0 25px var(--accent-red)) drop-shadow(0 0 35px var(--neon-red)); }
+        }
+        .header p {
+            font-size: 1.4rem;
+            color: var(--silver);
+            font-weight: 300;
+            letter-spacing: 1px;
+            animation: pulse-text 3s ease-in-out infinite;
+        }
+        @keyframes pulse-text {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .girlfriend-name::before { content: var(--girlfriend-name); }
+
+        /* Card principal */
+        .love-card {
+            background: linear-gradient(135deg,
+                rgba(17, 17, 17, 0.95) 0%,
+                rgba(26, 26, 26, 0.9) 50%,
+                rgba(17, 17, 17, 0.95) 100%);
+            backdrop-filter: blur(30px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            margin: 40px 0;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(255, 0, 64, 0.3),
+                0 0 40px rgba(255, 0, 64, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 64, 0.4);
+            animation: card-float 8s ease-in-out infinite;
+            text-align: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .love-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.9),
+                inset 0 1px 0 rgba(255, 0, 64, 0.4),
+                0 0 60px rgba(255, 0, 64, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 0, 64, 0.6);
+        }
+        @keyframes card-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        .love-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, transparent 30%, transparent 70%, rgba(255, 0, 64, 0.1) 100%);
+            border-radius: 25px;
+            z-index: -1;
+            animation: subtle-glow 6s ease-in-out infinite alternate;
+        }
+        @keyframes subtle-glow { 0%{opacity:.3} 100%{opacity:.6} }
+        .love-card h2 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--white), var(--silver), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            animation: title-shine 2s ease-in-out infinite;
+        }
+        @keyframes title-shine { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.3)} }
+        .love-message {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: var(--silver);
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            animation: message-glow 4s ease-in-out infinite alternate;
+        }
+        @keyframes message-glow {
+            0% { text-shadow: 0 0 10px rgba(192, 192, 192, 0.3); }
+            100% { text-shadow: 0 0 20px rgba(192, 192, 192, 0.6), 0 0 30px rgba(255, 0, 64, 0.2); }
+        }
+
+        .surprise-btn {
+            background: linear-gradient(45deg, var(--accent-red), var(--deep-red));
+            color: var(--white);
+            border: none;
+            padding: 25px 50px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin: 40px 0;
+            box-shadow: 0 15px 35px rgba(255, 0, 64, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation: btn-pulse 3s ease-in-out infinite;
+            border: 2px solid var(--neon-red);
+        }
+        .surprise-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        .surprise-btn:hover::before { left: 100%; }
+        .surprise-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(255, 0, 64, 0.6), 0 0 30px var(--gold);
+        }
+        @keyframes btn-pulse {
+            0%, 100% { box-shadow: 0 15px 35px rgba(255, 0, 64, 0.4); }
+            50% { box-shadow: 0 15px 35px rgba(255, 0, 64, 0.6), 0 0 20px var(--gold); }
+        }
+
+        /* Galeria */
+        .photo-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 60px 0; perspective: 1000px; }
+        .photo-frame {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--card-black) 0%, var(--secondary-black) 50%, var(--card-black) 100%);
+            border-radius: 20px;
+            padding: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 0, 64, 0.3), 0 0 25px rgba(255, 0, 64, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: frame-float 5s ease-in-out infinite;
+            border: 1px solid rgba(255, 0, 64, 0.4);
+        }
+        .photo-frame:nth-child(1) { animation-delay: 0s; }
+        .photo-frame:nth-child(2) { animation-delay: 0.3s; }
+        .photo-frame:nth-child(3) { animation-delay: 0.6s; }
+        .photo-frame:nth-child(4) { animation-delay: 0.9s; }
+        .photo-frame:nth-child(5) { animation-delay: 1.2s; }
+        .photo-frame:nth-child(6) { animation-delay: 1.5s; }
+        @keyframes frame-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; transition: all 0.4s ease; filter: brightness(0.95) contrast(1.15) saturate(1.1); }
+        .photo-frame::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.2) 0%, transparent 50%, rgba(255, 0, 64, 0.2) 100%);
+            border-radius: 20px;
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+        .photo-frame:hover::before { opacity: 1; animation: photo-shine 1s ease-in-out; }
+        @keyframes photo-shine { 0%{transform:translateX(-100%) skew(-15deg)} 100%{transform:translateX(100%) skew(-15deg)} }
+        .photo-frame:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 0, 64, 0.4), inset 0 1px 0 rgba(255, 0, 64, 0.5);
+            border-color: rgba(255, 0, 64, 0.8);
+        }
+        .photo-frame:hover img { filter: brightness(1.1) contrast(1.25) saturate(1.2); transform: scale(1.02); }
+
+        /* Mensagem especial */
+        .special-message {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 60px 0;
+            border: 2px solid var(--glass-border);
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+        .special-message::before {
+            content: '';
+            position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.1), rgba(255, 215, 0, 0.1), transparent);
+            animation: message-wave 4s ease-in-out infinite;
+        }
+        @keyframes message-wave { 0%{left:-100%} 100%{left:100%} }
+        .special-message.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 0, 64, 0.2);
+        }
+        .special-message h3 {
+            background: linear-gradient(45deg, var(--accent-red), var(--gold), var(--neon-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: special-glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes special-glow { 0%{filter:brightness(1)} 100%{filter:brightness(1.3) drop-shadow(0 0 10px var(--accent-red))} }
+        .special-message p { color: var(--silver); font-size: 1.3rem; line-height: 1.8; text-align: center; font-weight: 300; }
+
+        /* Footer */
+        .footer { text-align: center; padding: 60px 0; color: var(--silver); font-size: 1.3rem; position: relative; }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: -30px; left: 50%;
+            transform: translateX(-50%);
+            width: 300px; height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), var(--gold), var(--accent-red));
+            border-radius: 1px;
+            animation: footer-line 3s ease-in-out infinite alternate;
+        }
+        @keyframes footer-line { 0%{width:100px;opacity:.5} 100%{width:300px;opacity:1} }
+        .heart-beat { color: var(--accent-red); animation: mega-heartbeat 1s ease-in-out infinite; font-size: 2rem; display: inline-block; filter: drop-shadow(0 0 10px var(--accent-red)); }
+        @keyframes mega-heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3) rotate(5deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.2) rotate(3deg); }
+        }
+
+        /* Explosões */
+        .heart-explosion { position: fixed; pointer-events: none; z-index: 9999; font-size: 2rem; animation: heart-explode 2s ease-out forwards; }
+        @keyframes heart-explode {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0.5) rotate(360deg); opacity: 0; }
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary-black), var(--secondary-black));
+            z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            animation: fadeOut 2s ease-in-out 3s forwards;
+        }
+        .loading-heart {
+            font-size: 4rem;
+            animation: loading-pulse 1s ease-in-out infinite;
+            color: var(--accent-red);
+            filter: drop-shadow(0 0 20px var(--accent-red));
+        }
+        @keyframes loading-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5) rotate(45deg)} }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        /* Flash overlay da surpresa */
+        .flash-overlay {
+            position: fixed; inset: 0;
+            z-index: 12000;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(135deg, rgba(255,0,64,0.35), rgba(0,0,0,0.25), rgba(255,23,68,0.35));
+            transition: opacity .25s ease;
+        }
+        .flash-overlay.on { opacity: 1; }
+
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .header h1 { font-size: 2.8rem; margin-bottom: 15px; }
+            .header p { font-size: 1.1rem; }
+            .love-card { padding: 30px 20px; margin: 30px 0; border-radius: 20px; }
+            .love-card h2 { font-size: 2.2rem; margin-bottom: 25px; }
+            .love-message { font-size: 1.1rem; margin-bottom: 30px; }
+            .surprise-btn { padding: 18px 35px; font-size: 1.2rem; }
+            .photo-gallery { grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 40px 0; }
+            .photo-frame { border-radius: 15px; padding: 6px; }
+            .photo-frame img { border-radius: 10px; }
+            .special-message { padding: 30px 20px; border-radius: 20px; }
+            .special-message h3 { font-size: 2rem; }
+            .special-message p { font-size: 1.1rem; }
+            .intro-title { font-size: 1.05rem; }
+        }
+
+        /* Animações de entrada */
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+    
+        /* =========================
+           BRINDE (presente) + PEDIDO
+           (aparece abaixo das fotos)
+        ========================= */
+        .gift-box {
+            margin: 70px auto 0;
+            width: min(360px, 92vw);
+            padding: 22px 18px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(17,17,17,0.92), rgba(26,26,26,0.92));
+            border: 2px solid rgba(255,0,64,0.65);
+            box-shadow: 0 0 50px rgba(255,0,64,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform .22s ease, box-shadow .22s ease;
+            user-select: none;
+        }
+        .gift-box .emoji {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 14px rgba(255,0,64,0.45));
+        }
+        .gift-box .text {
+            color: rgba(255,255,255,0.88);
+            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1.35;
+        }
+        .gift-box .hint {
+            color: rgba(255,255,255,0.70);
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+        .gift-box:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 0 70px rgba(255,0,64,0.28), 0 0 22px rgba(255,215,0,0.14);
+        }
+
+        .proposal-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 40000; /* acima de tudo */
+            padding: 18px;
+        }
+        .proposal-box {
+            width: min(560px, 94vw);
+            background: linear-gradient(135deg, rgba(17,17,17,0.96), rgba(26,26,26,0.96));
+            padding: 34px 26px;
+            border-radius: 24px;
+            text-align: center;
+            border: 2px solid rgba(255,0,64,0.70);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.75), 0 0 45px rgba(255,0,64,0.22);
+            position: relative;
+            overflow: hidden;
+        }
+        .proposal-box h2 {
+            color: #fff;
+            margin-bottom: 14px;
+            font-size: 2.05rem;
+        }
+        .proposal-box p {
+            color: rgba(255,255,255,0.82);
+            font-size: 1.1rem;
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+        .proposal-buttons {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .proposal-buttons button {
+            padding: 14px 26px;
+            font-size: 1.1rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .proposal-buttons button:hover {
+            transform: translateY(-2px) scale(1.03);
+        }
+        .proposal-yes {
+            background: linear-gradient(45deg, #ff0040, #ffd700);
+            color: #090909;
+            box-shadow: 0 14px 30px rgba(255,0,64,0.28);
+        }
+        .proposal-no {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.14);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+            position: relative;
+        }
+        .proposal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(0,0,0,0.35);
+            color: rgba(255,255,255,0.9);
+            cursor: pointer;
+            font-size: 1.05rem;
+            display: grid;
+            place-items: center;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .proposal-close:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 18px rgba(255,0,64,0.25);
+        }
+
+
+        /* =========================
+           ALERTA FOFO + VÍDEO EXTRA
+        ========================= */
+        .cute-alert-overlay{
+            position: fixed;
+            inset: 0;
+            z-index: 25000;
+            display: none;
+            place-items: center;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(10px);
+            padding: 18px;
+        }
+        .cute-alert-overlay.show{ display: grid; }
+        .cute-alert-box{
+            width: min(720px, 92vw);
+            border-radius: 22px;
+            border: 1px solid rgba(255,0,64,0.35);
+            background: rgba(10,10,10,0.75);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.75), 0 0 35px rgba(255,0,64,0.18);
+            overflow: hidden;
+        }
+        .cute-alert-text{
+            padding: 18px 18px 14px;
+            text-align: center;
+            font-weight: 800;
+            font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+            letter-spacing: .2px;
+            background: linear-gradient(45deg, var(--accent-red), var(--gold), var(--neon-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 18px rgba(255,0,64,0.18);
+        }
+        .cute-video-wrap{
+            background: rgba(0,0,0,0.45);
+            padding: 14px;
+        }
+        .cute-video{
+            width: 100%;
+            height: auto;
+            max-height: min(70vh, 520px);
+            display: block;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+        }
+        .cute-video-actions{
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            padding: 12px 14px 16px;
+        }
+        .cute-video-actions button{
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 2px solid rgba(255,0,64,0.85);
+            background: rgba(0,0,0,0.35);
+            color: #fff;
+            font-size: 0.98rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .cute-video-actions button:hover{
+            transform: scale(1.04);
+            box-shadow: 0 0 20px rgba(255,0,64,0.45);
+        }
+
+    
+        /* 🎁 Presentinho bônus (joguinho) */
+        #bonusGift {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            z-index: 99999;
+            font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+        #bonusBtn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(0,0,0,0.45);
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+            transition: transform .12s ease, background .12s ease;
+        }
+        #bonusBtn:hover { transform: translateY(-1px); background: rgba(0,0,0,0.55); }
+        #bonusBtn:active { transform: translateY(0px) scale(0.99); }
+        #bonusBtn .dot {
+            width: 10px; height: 10px; border-radius: 999px;
+            background: rgba(255,0,80,0.85);
+            box-shadow: 0 0 0 6px rgba(255,0,80,0.18);
+        }
+        #bonusPanel {
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: 78px;
+            width: min(980px, calc(100vw - 32px));
+            height: min(720px, calc(100vh - 140px));
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.16);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 22px 70px rgba(0,0,0,0.55);
+            display: none;
+
+            /* deixa maior e ajustável no desktop */
+            min-width: 320px;
+            min-height: 360px;
+            resize: both;
+        }
+        @media (pointer: coarse) {
+            /* no celular/tablet: sem resize (evita bugs de toque) */
+            #bonusPanel { resize: none; }
+        }
+
+        /* modo tela cheia */
+        #bonusPanel.fullscreen{
+            inset: 12px;
+            width: auto;
+            height: auto;
+            bottom: 12px;
+            border-radius: 20px;
+        }
+
+        #bonusPanel.open { display: block; }
+        #bonusPanelHeader {
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 0 12px;
+            background: rgba(0,0,0,0.35);
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            color: rgba(255,255,255,0.92);
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+        #bonusPanelHeader button {
+            appearance: none;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border-radius: 12px;
+            padding: 8px 10px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+        #bonusIframe {
+            width: 100%;
+            height: calc(100% - 46px);
+            border: 0;
+            background: #0b0f14;
+        }
+
+
+        /* =========================
+           BÔNUS: CONFIRMAÇÃO + CONTAGEM (dia 11)
+        ========================= */
+        #bonusGateOverlay{
+            position: fixed;
+            inset: 0;
+            z-index: 50000;
+            display: none;
+            place-items: center;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(12px);
+            padding: 18px;
+        }
+        #bonusGateOverlay.show{ display: grid; }
+
+        .bonus-gate-box{
+            width: min(680px, 94vw);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid rgba(255,0,64,0.60);
+            background: linear-gradient(135deg, rgba(17,17,17,0.96), rgba(26,26,26,0.96));
+            box-shadow: 0 25px 90px rgba(0,0,0,0.80), 0 0 45px rgba(255,0,64,0.20);
+            position: relative;
+        }
+        .bonus-gate-close{
+            position: absolute;
+            right: 14px;
+            top: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(0,0,0,0.35);
+            color: #fff;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .bonus-gate-title{
+            padding: 22px 22px 10px;
+            text-align: center;
+            font-weight: 900;
+            letter-spacing: .3px;
+            color: #ff7aa2;
+            font-size: 20px;
+        }
+        .bonus-gate-body{
+            padding: 6px 22px 18px;
+            color: #fff;
+            text-align: center;
+        }
+        .bonus-gate-body p{ margin: 6px 0; }
+        .bonus-gate-actions{
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 22px 22px;
+        }
+        .bonus-gate-actions button{
+            border: 1px solid rgba(255,0,64,0.55);
+            background: rgba(0,0,0,0.25);
+            color: #fff;
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-weight: 900;
+            cursor: pointer;
+            min-width: 160px;
+        }
+        .bonus-gate-actions button.primary{
+            background: linear-gradient(135deg, rgba(255,0,64,0.95), rgba(170,0,50,0.95));
+            border-color: rgba(255,0,64,0.75);
+        }
+        .bonus-gate-timer{
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        .bonus-gate-when{
+            opacity: .85;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- VÍDEO DE FUNDO (carrega só depois da intro) -->
+    <video class="bg-video" id="bgVideo" autoplay muted loop playsinline preload="metadata"></video>
+    <div class="video-overlay"></div>
+
+    <!-- INTRO -->
+    <div class="intro" id="intro">
+        <div class="intro-box">
+            <div class="intro-title">para o amor da minha vida! ❤️</div>
+
+            <video id="introVideo" playsinline preload="auto">
+                <source src="https://files.catbox.moe/5p3cyz.mp4" type="video/mp4">
+            </video>
+
+            <div class="progress"><span id="progressBar"></span></div>
+
+            <div class="intro-ui" id="introUI">
+                <button id="enterBtn">▶️ Começar com som</button>
+                <button id="skipBtn">⏭️ Pular</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- ALERTA FOFO + VÍDEO EXTRA (aparece 10s depois do 1º vídeo) -->
+    <div class="cute-alert-overlay" id="cuteOverlay" aria-hidden="true">
+        <div class="cute-alert-box" role="dialog" aria-modal="true">
+            <div class="cute-alert-text" id="cuteText">alerta de fofura i vergonha kkkkkkk</div>
+            <div class="cute-video-wrap">
+                <video class="cute-video" id="cuteVideo" playsinline preload="metadata" controls>
+                    <!-- Troque a URL abaixo pelo seu vídeo -->
+                    <source src="https://files.catbox.moe/dp30ky.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="cute-video-actions">
+                <button id="cutePlayBtn">▶️ Tocar vídeo</button>
+                <button id="cuteCloseBtn">Fechar ✕</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- VÍDEO HOMENAGEM (abre antes do pedido do 🎁) -->
+    <div class="cute-alert-overlay" id="tributeOverlay" aria-hidden="true">
+        <div class="cute-alert-box" role="dialog" aria-modal="true">
+            <div class="cute-alert-text" id="tributeText">pra descontrair, minha pipocaKKKK vem pedra ai 💖</div>
+            <div class="cute-video-wrap">
+                <video class="cute-video" id="tributeVideo" playsinline preload="metadata" controls>
+                    <!-- Troque a URL/arquivo abaixo pelo seu vídeo de homenagem -->
+                    <source src="https://files.catbox.moe/y5wevl.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="cute-video-actions">
+                <button id="tributeContinueBtn">Continuar 🎁</button>
+                <button id="tributeCloseBtn">Fechar ✕</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Overlay de loading -->
+    <div class="loading-overlay">
+        <div class="loading-heart">❤️</div>
+    </div>
+
+    <!-- Flash overlay -->
+    <div class="flash-overlay" id="flash"></div>
+
+    <!-- Cursor personalizado -->
+    <div class="custom-cursor"></div>
+
+    <!-- Partículas de fundo -->
+    <div class="particles"></div>
+
+    <!-- Efeito de ondas -->
+    <div class="wave-bg"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1>Para Minha <span class="girlfriend-name"></span></h1>
+            <p>uma carta aberta de aniversário para minha tinkebela ❤️</p>
+        </header>
+
+        <main class="love-card">
+            <h2>Feliz aniversário, meu amor.💕</h2>
+            <div class="love-message">
+                <p><span class="girlfriend-name"></span>, o aniversário é seu, mas o presente é meu por ter você na minha vida. Feliz aniversário, minha princesinha Sou muito grato por ter conhecido você em janeiro de 2022.</p>
+                <br>
+                <p>você é o amor da minha vida, não tenho dúvidas tinkebela. Obrigado por ser a melhor escolha da minha vida, você é uma pessoa e mulher incrível! ter você ao meu lado me faz ser o homem mais feliz do mundo. ❤️
+                </p>
+
+                <p>eu não tenho palavras pra descrever a pessoa que você é. tu é uma pessoa muito complicada, mas eu amo o seu jeitinho. você é uma pessoa que me deixa maluco; tem dia que eu não entendo você, não entendo os seus sentimentos. mesmo com tudo isso, você não deixa de ser uma pessoa tão boa. você não demonstra, tinki, mas eu sei como você é boa por dentro, gentil. sua personalidade é absurdamente incrível. você é muito além do que uma mulher bonita. você é uma pessoa excepcional, você é absurdamente incrível em tudo que faz. você me faz tão bem. uma garota que exala carisma (KKKKK às vezes tá). você é uma mulher incrível, eu amo tudo em você: sua personalidade, seu jeito, o seu jeitinho de ser. minha eterna patinha do free fire KKKKKK. de lá pra cá, vivemos muita coisa, né? quem diria… o melhor de tudo é que você continua sendo a mesma comigo, nunca mudou o seu jeitinho FODA de ser. acho que nem se eu reencarnasse umas 30 vezes nunca conheceria uma pessoa tão incrível como você. eu te amo muito. ❤️
+                </p>
+            </div>
+
+            <button class="surprise-btn" onclick="showSurprise()">
+                ✨ Uma Surpresa Especial Para Você ✨
+            </button>
+
+            <div class="special-message" id="specialMessage">
+                <h3>💖 pra minha menorzinha quentinha 💖</h3>
+                <p><span class="girlfriend-name"></span>, tinki, agora falar umas palavinhas, né?
+primeiramente, feliz aniversário, meu amor. você é uma garota abençoada… garota não né? agora é uma molier adultinha.
+
+o que falar de você, né? sempre que me vem o seu nome na cabeça, tenho uma mistura de sentimentos absurdos. quando te conheci em 2022, não acreditaria que iríamos chegar aqui hoje! foram momentos tão bons ao seu lado, você sempre me proporcionando uma risada gostosa, uma companhia boa.
+
+eu sou muito abençoado por ter você na minha vida até hoje. como você consegue me explicar que você é a mulher que eu mais “amei, amo na vida” sem nunca ter encostado em você? sem ter dado sequer um beijinho ou abraço na mulher da minha vida.
+
+um completo absurdo, né? são 5 anos te amando, tinki. 5 anos intensos ao seu lado. já paramos de se falar duas vezes, né? kkk não vou mentir, da última vez cheguei a chorar achando que tinha perdido você (nunca tinha chorado por ninguém). e mesmo assim, olha onde estamos novamente, né?
+
+enfim, não vem ao assunto, </p>
+                <br>
+                <p>laninha, eu prometo fazer todos os seus dias o mais especial possível! não só no seu aniversário. eu sempre vou dar o meu máximo pra você se sentir a mulher mais amada e desejada do mundo.
+
+nunca vou medir esforços pra te fazer feliz. eu prometo que você vai ser a mulher mais feliz desse mundo!
+
+tô falando muito, né? KKKKK agora…
+
+tinki, pqp, VOCÊ É MUITO FODA, PORRA. você é literalmente A MELHOR COISA QUE ACONTECEU NA MINHA VIDA!! me faz rir, me faz ter um ciúmes do carai, me faz passar raiva que pqp… tem dia que falta pouco eu pegar o carro e bater no poste de ódio.
+
+você é minha menorzinha quentinhaaaaaaa, minha TINKEBEU. 💝</p>
+            </div>
+        </main>
+
+        <section class="photo-gallery">
+            <div class="photo-frame">
+                <img src="img/1.jpeg" alt="Nossa primeira foto juntos" onerror="this.style.display='none'; this.parentNode.innerHTML='📸<br><small>Foto 1</small>';">
+            </div>
+            <div class="photo-frame">
+                <img src="img/2.jpeg" alt="Momento especial" onerror="this.style.display='none'; this.parentNode.innerHTML='💕<br><small>Foto 2</small>';">
+            </div>
+            <div class="photo-frame">
+                <img src="img/3.jpeg" alt="Lembrança querida" onerror="this.style.display='none'; this.parentNode.innerHTML='🌹<br><small>Foto 3</small>';">
+            </div>
+            <div class="photo-frame">
+                <img src="img/4.jpeg" alt="Nosso amor" onerror="this.style.display='none'; this.parentNode.innerHTML='✨<br><small>Foto 4</small>';">
+            </div>
+            <div class="photo-frame">
+                <img src="img/5.jpeg" alt="Momento único" onerror="this.style.display='none'; this.parentNode.innerHTML='💖<br><small>Foto 5</small>';">
+            </div>
+            <div class="photo-frame">
+                <img src="img/6.jpeg" alt="Para sempre" onerror="this.style.display='none'; this.parentNode.innerHTML='🥰<br><small>Foto 6</small>';">
+            </div>
+        </section>
+
+
+        <!-- Brinde surpresa (abaixo das fotos) -->
+        <div class="gift-box" id="giftBox" onclick="openTributeThenProposal()">
+            <div class="emoji">🎁</div>
+            <div class="text">Só aperte se estiver preparada…</div>
+            <div class="hint">tem uma pergunta aqui dentro 👀</div>
+        </div>
+
+        <footer class="footer">
+            <p> <span class="heart-beat">❤️</span> </p>
+            <p>Para a <span class="girlfriend-name"></span> minha tinkebeu, a pessoal mais especial pra mi nesse mundo! 💫</p>
+            <p>Feliz anivesário, meu amor! 💑</p>
+        </footer>
+    </div>
+
+    <!-- Modal do pedido (BRINDE) -->
+    <div class="proposal-modal" id="proposalModal" aria-hidden="true">
+        <div class="proposal-box" role="dialog" aria-modal="true">
+            <button class="proposal-close" id="proposalClose" title="Fechar">✕</button>
+            <h2>tinki, no próximo passo eu irei te fazer um pedido tá?  💖</h2>
+            <p> eu pensei muito sobre, por isso você vai escolher o dia que vai jogar, assim que você clicar nele! você vai escolher, dia 10 ou 11.
+                tu aceita ser minha princesa pra sempre?
+            </p>
+            <div class="proposal-buttons">
+                <button class="proposal-yes" id="proposalYes">Sim 😍</button>
+                <button class="proposal-no" id="proposalNo">Não 🙄</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const VIDEO_URL = "https://files.catbox.moe/5p3cyz.mp4";
+
+        // ========= Intro + BG (sem travar: bg só carrega DEPOIS) =========
+        const bgVideo = document.getElementById('bgVideo');
+        const intro = document.getElementById('intro');
+        const introVideo = document.getElementById('introVideo');
+        const introUI = document.getElementById('introUI');
+        const enterBtn = document.getElementById('enterBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const progressBar = document.getElementById('progressBar');
+
+        // ========= Alerta fofo + vídeo extra =========
+        // Mostra o alerta 10s depois do 1º vídeo (quando ele termina naturalmente).
+        let cuteTimer = null;
+        let cuteHasShown = false;
+
+        const cuteOverlay = document.getElementById('cuteOverlay');
+        const cuteVideo = document.getElementById('cuteVideo');
+        const cutePlayBtn = document.getElementById('cutePlayBtn');
+        const cuteCloseBtn = document.getElementById('cuteCloseBtn');
+
+        function openCuteOverlay() {
+            if (!cuteOverlay || cuteHasShown) return;
+            cuteHasShown = true;
+
+            cuteOverlay.classList.add('show');
+            cuteOverlay.setAttribute('aria-hidden', 'false');
+
+            // tenta tocar automaticamente (pode falhar dependendo do navegador)
+            tryPlayCuteVideo();
+        }
+
+        function closeCuteOverlay() {
+            if (!cuteOverlay) return;
+            cuteOverlay.classList.remove('show');
+            cuteOverlay.setAttribute('aria-hidden', 'true');
+            try { if (cuteVideo) { cuteVideo.pause(); cuteVideo.currentTime = 0; } } catch(e) {}
+        }
+
+        async function tryPlayCuteVideo() {
+            if (!cuteVideo) return;
+            try {
+                // se possível, toca com som
+                cuteVideo.muted = false;
+                await cuteVideo.play();
+            } catch (e) {
+                // fallback: tenta mudo (autoplay costuma aceitar mudo)
+                try {
+                    cuteVideo.muted = true;
+                    await cuteVideo.play();
+                } catch (e2) {
+                    // se ainda assim falhar, usuário usa o botão "Tocar vídeo"
+                }
+            }
+        }
+
+        function scheduleCuteAfterIntro() {
+            if (cuteTimer) clearTimeout(cuteTimer);
+            cuteTimer = setTimeout(openCuteOverlay, 10000); // 10s
+        }
+
+        if (cutePlayBtn) cutePlayBtn.addEventListener('click', () => { tryPlayCuteVideo(); });
+        if (cuteCloseBtn) cuteCloseBtn.addEventListener('click', closeCuteOverlay);
+        if (cuteOverlay) cuteOverlay.addEventListener('click', (e) => { if (e.target === cuteOverlay) closeCuteOverlay(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCuteOverlay(); });
+
+
+        function enableBgFrom(timeSec) {
+            try {
+                bgVideo.src = VIDEO_URL;
+                bgVideo.load();
+                bgVideo.currentTime = Math.max(0, timeSec || 0);
+            } catch (e) {}
+            bgVideo.play().catch(()=>{});
+        }
+
+        function closeIntro(sync=true) {
+            if (sync) enableBgFrom(introVideo.currentTime || 0);
+            else enableBgFrom(0);
+
+            intro.classList.add('hide');
+            setTimeout(() => {
+                try { introVideo.pause(); } catch(e) {}
+                intro.remove();
+                if (sync) scheduleCuteAfterIntro();
+            }, 600);
+        }
+
+        enterBtn.addEventListener('click', async () => {
+            try {
+                introVideo.muted = false;
+                await introVideo.play();
+                introUI.style.display = 'none';
+
+                introVideo.ontimeupdate = () => {
+                    if (introVideo.duration) {
+                        progressBar.style.width = ((introVideo.currentTime / introVideo.duration) * 100).toFixed(1) + '%';
+                    }
+                };
+                introVideo.onended = () => closeIntro(true);
+            } catch (e) {
+                introVideo.muted = true;
+                introVideo.play();
+                introUI.style.display = 'none';
+                introVideo.onended = () => closeIntro(true);
+            }
+        });
+        skipBtn.addEventListener('click', () => closeIntro(false));
+
+        // ========= Cursor personalizado (apenas mouse) =========
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            if (!cursor || !window.matchMedia('(pointer: fine)').matches) return;
+
+            cursor.style.left = (e.clientX - 10) + 'px';
+            cursor.style.top = (e.clientY - 10) + 'px';
+
+            if (Math.random() > 0.82) {
+                let trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = (e.clientX - 3) + 'px';
+                trail.style.top = (e.clientY - 3) + 'px';
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 900);
+            }
+        });
+
+        // ========= Partículas =========
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 6 + 4) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+
+            const redColors = [
+                'rgba(255, 0, 64, 0.8)',
+                'rgba(204, 0, 51, 0.8)',
+                'rgba(255, 215, 0, 0.6)',
+                'rgba(255, 255, 255, 0.35)'
+            ];
+            particle.style.background = `radial-gradient(circle, ${redColors[Math.floor(Math.random() * redColors.length)]}, transparent)`;
+
+            document.querySelector('.particles').appendChild(particle);
+            setTimeout(() => particle.remove(), 10000);
+        }
+        setInterval(createParticle, 550);
+
+        // ========= Surpresa =========
+        function showSurprise() {
+            const message = document.getElementById('specialMessage');
+            message.classList.add('show');
+
+            createHeartExplosion();
+            createTeAmoAnimation();
+
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 300]);
+
+            const flash = document.getElementById('flash');
+            flash.classList.add('on');
+            setTimeout(() => flash.classList.remove('on'), 850);
+
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => createParticle(), i * 60);
+            }
+        }
+
+        function createTeAmoAnimation() {
+            const teAmoTexts = [
+                'FELIZ ANIVERSÁRIO TINKIIII ❤️',
+                '💖 MINHA TINKEBELAA 💖',
+                'EU TE AMO!',
+                '❤️ MEU AMOR ❤️',
+                'MINHA MENORZINHA QUENTINHA',
+                '💕 VOCÊ É TUDO 💕',
+                'VOCÊ É TUDO PRA MI, TE AMO!!!',
+                '🥰 TE AMO DEMAIS 🥰'
+            ];
+
+            const mainTeAmo = document.createElement('div');
+            mainTeAmo.innerHTML = 'TE AMO ❤️';
+            mainTeAmo.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 4rem;
+                font-weight: bold;
+                background: linear-gradient(45deg, #ff0040, #ffd700, #ff0040);
+                background-size: 200% 200%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                z-index: 9999;
+                pointer-events: none;
+                animation: te-amo-main 4s ease-out forwards;
+                text-shadow: 0 0 30px rgba(255, 0, 64, 0.8);
+                filter: drop-shadow(0 0 20px rgba(255, 0, 64, 1));
+            `;
+            document.body.appendChild(mainTeAmo);
+            setTimeout(() => mainTeAmo.remove(), 4000);
+
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const teAmo = document.createElement('div');
+                    const randomText = teAmoTexts[Math.floor(Math.random() * teAmoTexts.length)];
+                    teAmo.innerHTML = randomText;
+
+                    const startX = Math.random() * window.innerWidth;
+                    const startY = Math.random() * window.innerHeight;
+
+                    teAmo.style.cssText = `
+                        position: fixed;
+                        left: ${startX}px;
+                        top: ${startY}px;
+                        font-size: ${Math.random() * 2 + 1.5}rem;
+                        font-weight: bold;
+                        color: ${Math.random() > 0.5 ? '#ff0040' : '#ffd700'};
+                        z-index: 9998;
+                        pointer-events: none;
+                        animation: te-amo-float 3s ease-out forwards;
+                        text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
+                        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+                    `;
+                    document.body.appendChild(teAmo);
+                    setTimeout(() => teAmo.remove(), 3000);
+                }, i * 200);
+            }
+
+            for (let i = 0; i < 14; i++) {
+                setTimeout(() => {
+                    const miniTeAmo = document.createElement('div');
+                    miniTeAmo.innerHTML = '💖 TE AMO';
+                    miniTeAmo.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: -50px;
+                        font-size: 1.2rem;
+                        color: #ff0040;
+                        z-index: 9997;
+                        pointer-events: none;
+                        animation: te-amo-rain ${Math.random() * 3 + 2}s linear forwards;
+                        text-shadow: 0 0 10px rgba(255, 0, 64, 0.6);
+                    `;
+                    document.body.appendChild(miniTeAmo);
+                    setTimeout(() => miniTeAmo.remove(), 5000);
+                }, i * 150);
+            }
+
+            const pulseOverlay = document.createElement('div');
+            pulseOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(255, 0, 64, 0.1), transparent);
+                z-index: 9996;
+                pointer-events: none;
+                animation: love-pulse 2s ease-in-out;
+            `;
+            document.body.appendChild(pulseOverlay);
+            setTimeout(() => pulseOverlay.remove(), 2000);
+        }
+
+        function createHeartExplosion() {
+            const hearts = ['❤️', '💖', '💕', '💗', '💓', '💝', '♥️', '💘'];
+
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-explosion';
+                    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = Math.random() * window.innerHeight + 'px';
+                    heart.style.color = Math.random() > 0.5 ? '#ff0040' : '#ffd700';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        // Notificações
+        const romanticMessages = [
+            "💖 Você é meu mundo inteiro!",
+            "🌹 Cada dia com você é especial!",
+            "💎 Você é meu tesouro mais precioso!",
+            "✨ Meu coração bate só por você!",
+            "🥰 Te amo mais a cada segundo!",
+            "💕 Você é minha felicidade!",
+            "🌟 Minha estrela mais brilhante!",
+            "💘 Amor da minha vida toda!"
+        ];
+        function showNotification() {
+            const notification = document.createElement('div');
+            const message = romanticMessages[Math.floor(Math.random() * romanticMessages.length)];
+
+            notification.innerHTML = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #ff0040, #990026);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                z-index: 9999;
+                box-shadow: 0 10px 30px rgba(255, 0, 64, 0.4);
+                animation: notification-slide 4s ease-in-out forwards;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 0, 64, 0.3);
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 4000);
+        }
+        setInterval(showNotification, 18000);
+
+        // Visualizador de som (menos pesado)
+        function createSoundWave() {
+            const wave = document.createElement('div');
+            wave.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                width: 4px;
+                height: ${Math.random() * 50 + 10}px;
+                background: linear-gradient(to top, #ff0040, #ffd700);
+                border-radius: 2px;
+                animation: sound-wave 0.5s ease-in-out infinite alternate;
+                margin-right: 2px;
+                box-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
+            `;
+            const container = document.querySelector('.sound-visualizer') || createSoundContainer();
+            container.appendChild(wave);
+            setTimeout(() => wave.remove(), 900);
+        }
+        function createSoundContainer() {
+            const container = document.createElement('div');
+            container.className = 'sound-visualizer';
+            container.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                display: flex;
+                align-items: end;
+                z-index: 1000;
+                gap: 2px;
+            `;
+            document.body.appendChild(container);
+            return container;
+        }
+        setInterval(createSoundWave, 260);
+
+        // Intersection observer
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('animate-in');
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.photo-frame, .special-message');
+            elements.forEach(el => observer.observe(el));
+
+            for (let i = 0; i < 12; i++) setTimeout(() => createParticle(), i * 320);
+            setTimeout(showNotification, 5000);
+
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 1s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // CSS extra
+        const extraStyles = document.createElement('style');
+        extraStyles.textContent = `
+            @keyframes ultra-text {
+                0% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
+                50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(180deg); }
+                100% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(360deg); }
+            }
+            @keyframes ripple-effect {
+                0% { transform: scale(0); opacity: 1; }
+                100% { transform: scale(4); opacity: 0; }
+            }
+            @keyframes notification-slide {
+                0% { transform: translateX(100%); opacity: 0; }
+                10%, 90% { transform: translateX(0); opacity: 1; }
+                100% { transform: translateX(100%); opacity: 0; }
+            }
+            @keyframes sound-wave { 0% { height: 10px; } 100% { height: 50px; } }
+            @keyframes te-amo-main {
+                0% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); background-position: 0% 50%; }
+                20% { opacity: 1; transform: translate(-50%, -50%) scale(1.5) rotate(5deg); background-position: 100% 50%; }
+                40% { transform: translate(-50%, -50%) scale(1.2) rotate(-3deg); background-position: 0% 50%; }
+                60% { transform: translate(-50%, -50%) scale(1.3) rotate(2deg); background-position: 100% 50%; }
+                80% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); background-position: 0% 50%; }
+                100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(0deg); background-position: 100% 50%; }
+            }
+            @keyframes te-amo-float {
+                0% { opacity: 0; transform: scale(0) rotate(0deg); }
+                20% { opacity: 1; transform: scale(1.2) rotate(10deg); }
+                50% { opacity: 1; transform: scale(1) rotate(-5deg) translateY(-20px); }
+                80% { opacity: 1; transform: scale(1.1) rotate(5deg) translateY(-40px); }
+                100% { opacity: 0; transform: scale(0.5) rotate(0deg) translateY(-60px); }
+            }
+            @keyframes te-amo-rain {
+                0% { opacity: 0; transform: translateY(-50px) rotate(0deg) scale(0.8); }
+                10% { opacity: 1; transform: translateY(0px) rotate(10deg) scale(1); }
+                90% { opacity: 1; transform: translateY(calc(100vh - 100px)) rotate(-10deg) scale(0.9); }
+                100% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.5); }
+            }
+            @keyframes love-pulse {
+                0% { opacity: 0; transform: scale(0.8); }
+                50% { opacity: 1; transform: scale(1.2); }
+                100% { opacity: 0; transform: scale(1.5); }
+            }
+            .animate-in { animation: slideUp 0.8s ease-out forwards; }
+        `;
+        document.head.appendChild(extraStyles);
+
+        
+        
+        // ========= BRINDE: Pedido de namoro (fica abaixo das fotos) =========
+        function openProposal() {
+            const modal = document.getElementById('proposalModal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+
+            // garantir handlers uma vez
+            if (!modal.dataset.bound) {
+                modal.dataset.bound = '1';
+
+                const closeBtn = document.getElementById('proposalClose');
+                const yesBtn = document.getElementById('proposalYes');
+                const noBtn = document.getElementById('proposalNo');
+
+                const close = () => {
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
+                    const nb = document.getElementById('proposalNo');
+                    if (nb) nb.style.transform = '';
+                };
+
+                if (closeBtn) closeBtn.addEventListener('click', close);
+                modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+                if (noBtn) {
+                    const canHover = window.matchMedia('(pointer: fine)').matches;
+                    let dodgeCount = 0;
+
+                    const dodge = () => {
+                        dodgeCount++;
+                        const maxX = 160, maxY = 95;
+                        const x = (Math.random() * (maxX * 2) - maxX);
+                        const y = (Math.random() * (maxY * 2) - maxY);
+                        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+                        if (dodgeCount === 4) noBtn.textContent = 'Tem certeza? 😳';
+                        if (dodgeCount === 7) noBtn.textContent = 'Tá difícil clicar… 😅';
+                    };
+
+                    if (canHover) noBtn.addEventListener('mouseenter', dodge);
+                    else noBtn.addEventListener('click', () => { noBtn.textContent = 'Acho que é SIM 😌'; });
+                }
+
+                if (yesBtn) {
+                    yesBtn.addEventListener('click', () => {
+                        const box = modal.querySelector('.proposal-box');
+                        if (box) {
+                            box.innerHTML = `
+                                <button class="proposal-close" id="proposalClose2" title="Fechar">✕</button>
+                                <h2>pqp minha menorzinha quentinha, seu homi está muito feliz! 😍💖</h2>
+                                <p>Agora é oficial… <b>somos nós dois cabeçuda</b> ❤️<br>Obrigado por dizer SIM, meu amor!</p>
+                                <div class="proposal-buttons">
+                                    <button class="proposal-yes" id="okBtn">Eu te amo! 💞</button>
+                                </div>
+                            `;
+                            const close2 = document.getElementById('proposalClose2');
+                            const okBtn = document.getElementById('okBtn');
+                            if (close2) close2.addEventListener('click', close);
+                            if (okBtn) okBtn.addEventListener('click', close);
+                        }
+                        try { createHeartExplosion(); } catch(e) {}
+                        try { createTeAmoAnimation(); } catch(e) {}
+                    });
+                }
+            }
+        }
+
+
+
+        // ========= VÍDEO HOMENAGEM antes do pedido =========
+        const tributeOverlay = document.getElementById('tributeOverlay');
+        const tributeVideo = document.getElementById('tributeVideo');
+        const tributeCloseBtn = document.getElementById('tributeCloseBtn');
+        const tributeContinueBtn = document.getElementById('tributeContinueBtn');
+
+        function openTributeThenProposal() {
+            // se não tiver vídeo configurado, abre direto o pedido
+            if (!tributeOverlay || !tributeVideo) { openProposal(); return; }
+
+            // se o source ainda estiver placeholder, abre direto o pedido
+            const src = tributeVideo.querySelector('source')?.getAttribute('src') || '';
+            if (!src || src.includes('COLOQUE_AQUI_SEU_VIDEO')) { openProposal(); return; }
+
+            tributeOverlay.classList.add('show');
+            tributeOverlay.setAttribute('aria-hidden', 'false');
+
+            // tentar dar play (pode depender de clique)
+            try { tributeVideo.play(); } catch(e) {}
+        }
+
+        function closeTribute() {
+            if (!tributeOverlay) return;
+            tributeOverlay.classList.remove('show');
+            tributeOverlay.setAttribute('aria-hidden', 'true');
+            try { tributeVideo.pause(); tributeVideo.currentTime = 0; } catch(e) {}
+        }
+
+        tributeCloseBtn?.addEventListener('click', closeTribute);
+        tributeOverlay?.addEventListener('click', (e) => { if (e.target === tributeOverlay) closeTribute(); });
+
+        tributeContinueBtn?.addEventListener('click', () => {
+            closeTribute();
+            openProposal();
+        });
+
+
+        console.log('💖 Site de Amor carregado com sucesso! ✨');
+    </script>
+
+    
+    <!-- 🎁 Presentinho bônus: joguinho do pedido -->
+    <div id="bonusGift" aria-label="Presentinho bônus">
+        <div id="bonusPanel" role="dialog" aria-modal="false" aria-label="Joguinho bônus">
+            <div id="bonusPanelHeader">
+                <div>🎮 Presentinho bônus</div>
+                <div style="display:flex; gap:8px; align-items:center;"><button id="bonusMax" type="button" title="Alternar tela cheia">Tela cheia ⛶</button><button id="bonusClose" type="button">Fechar ✕</button></div>
+            </div>
+            <iframe id="bonusIframe" sandbox="allow-scripts allow-same-origin allow-pointer-lock" allow="autoplay; fullscreen" title="Mini Mario + Pedido"></iframe>
+        </div>
+
+        <div id="bonusBtn" title="Abrir presentinho bônus">
+            <span class="dot" aria-hidden="true"></span>
+            <span>🎁 Bônus</span>
+        </div>
+    </div>
+
+
+
+<!-- 🎮 Conteúdo embutido do joguinho bônus (srcdoc) -->
+
+    <!-- 🎁 BÔNUS: escolha (agora x dia 11) + contagem regressiva -->
+    <div id="bonusGateOverlay" aria-hidden="true">
+        <div class="bonus-gate-box" role="dialog" aria-modal="true" aria-label="Confirmação do bônus">
+            <button class="bonus-gate-close" id="bonusGateClose" title="Fechar">✕</button>
+            <div class="bonus-gate-title">Você tem certeza que quer jogar agora?</div>
+            <div class="bonus-gate-body">
+                <div id="bonusGateDecision">
+                    <p>Se você jogar agora… é caminho sem volta 😈🎮</p>
+                    <p style="opacity:.85; margin-top:6px;">Ou você pode deixar pro <b>dia 11</b> e voltar quando estiver pronta 💖</p>
+                </div>
+
+                <div id="bonusGateCountdown" style="display:none;">
+                    <p>Quase lá… volta no <b>dia 11</b> pra jogar ✨</p>
+                    <div class="bonus-gate-timer" id="bonusGateTimer">--:--:--</div>
+                    <div class="bonus-gate-when" id="bonusGateWhen"></div>
+                </div>
+            </div>
+
+            <div class="bonus-gate-actions">
+                <button class="primary" id="bonusPlayNowBtn">Jogar agora 🎁</button>
+                <button id="bonusPlay11Btn">Jogar dia 11 ⏳</button>
+                <button class="primary" id="bonusOpenWhenReadyBtn" style="display:none;">Bora jogar 🎮</button>
+            </div>
+        </div>
+    </div>
+
+
+<template id="bonusGameTemplate">
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Mini Mario + Pedido 💘</title>
+  <style>
+    :root{ --bg:#0b0f14; --panel:rgba(255,255,255,.08); --stroke:rgba(255,255,255,.14); --text:#e9eef5; }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(1200px 700px at 50% 10%, rgba(255,0,80,.18), transparent 60%),
+                  radial-gradient(1000px 800px at 20% 80%, rgba(255,215,0,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      overflow:hidden;
+    }
+    .wrap{ width:min(980px, 96vw); padding:18px; }
+    .topbar{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background:var(--panel); border:1px solid var(--stroke);
+      backdrop-filter: blur(10px);
+    }
+    .hint{ opacity:.85; font-size:14px; line-height:1.3; }
+    .kbd{ padding:2px 8px; border-radius:8px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.25); font-weight:700; }
+
+    .stage{
+      position:relative;
+      border-radius:18px;
+      background: rgba(0,0,0,.35);
+      border:1px solid rgba(255,0,80,.25);
+      box-shadow: 0 18px 70px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    canvas{ display:block; width:100%; height:auto; position:relative; z-index: 1; }
+
+    /* Mobile controls */
+    .controls{
+      z-index: 10;
+
+      position:absolute; inset:auto 0 0 0;
+      display:flex; justify-content:space-between; align-items:flex-end;
+      padding:14px;
+      pointer-events:none;
+    }
+    .pad, .btns{
+      display:flex; gap:10px;
+      pointer-events:auto;
+    }
+    .btn{
+      width:58px; height:58px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color:var(--text);
+      font-size:18px;
+      font-weight:800;
+      display:grid; place-items:center;
+      user-select:none;
+      touch-action:none;
+      backdrop-filter: blur(10px);
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+    .btn.wide{ width:84px; }
+
+    /* Overlay proposal */
+    .overlay{
+      border: none;
+      padding: 0;
+      margin: auto;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+
+      z-index: 50;
+
+      position:absolute; inset:0;
+      display:flex;
+      color: var(--text);
+      align-items:center; justify-content:center;
+      padding:18px;
+      background: radial-gradient(700px 450px at 50% 45%, rgba(0,0,0,.75), rgba(0,0,0,.9));
+      backdrop-filter: blur(6px);
+    }
+    dialog.overlay:not([open]){ display:none; }
+    .card{
+      width:min(720px, 96vw);
+      border-radius:22px;
+      background: linear-gradient(135deg, rgba(255,0,80,.16), rgba(255,215,0,.10)) , rgba(20,25,32,.65);
+      border:1px solid rgba(255,0,80,.28);
+      box-shadow: 0 18px 70px rgba(0,0,0,.6), 0 0 35px rgba(255,0,80,.15);
+      padding:18px 18px 16px;
+      text-align:center;
+    }
+    .title{
+      margin:6px 0 6px;
+      font-size: clamp(22px, 3.2vw, 34px);
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+    .sub{ margin:0 0 14px; opacity:.88; }
+    .btnrow{
+      display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+      margin-top:12px;
+      position:relative;
+      min-height:56px;
+    }
+    .choice{
+      padding:12px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color:var(--text);
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      touch-action:manipulation;
+    }
+    .choice.primary{
+      border-color: rgba(255,0,80,.35);
+      background: linear-gradient(135deg, rgba(255,0,80,.30), rgba(255,215,0,.12));
+    }
+    .choice:active{ transform: translateY(1px); }
+    .toast{
+      margin-top:10px;
+      opacity:.9;
+      min-height:24px;
+      font-weight:700;
+    }
+    dialog::backdrop{
+      background: radial-gradient(700px 450px at 50% 45%, rgba(0,0,0,.75), rgba(0,0,0,.9));
+      backdrop-filter: blur(6px);
+    }
+
+    .credits{
+      margin-top:10px; opacity:.7; font-size:12px; text-align:center;
+    }
+  
+        /* =========================
+           BÔNUS: CONFIRMAÇÃO + CONTAGEM (dia 11)
+        ========================= */
+        #bonusGateOverlay{
+            position: fixed;
+            inset: 0;
+            z-index: 50000;
+            display: none;
+            place-items: center;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(12px);
+            padding: 18px;
+        }
+        #bonusGateOverlay.show{ display: grid; }
+
+        .bonus-gate-box{
+            width: min(680px, 94vw);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid rgba(255,0,64,0.60);
+            background: linear-gradient(135deg, rgba(17,17,17,0.96), rgba(26,26,26,0.96));
+            box-shadow: 0 25px 90px rgba(0,0,0,0.80), 0 0 45px rgba(255,0,64,0.20);
+            position: relative;
+        }
+        .bonus-gate-close{
+            position: absolute;
+            right: 14px;
+            top: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(0,0,0,0.35);
+            color: #fff;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .bonus-gate-title{
+            padding: 22px 22px 10px;
+            text-align: center;
+            font-weight: 900;
+            letter-spacing: .3px;
+            color: #ff7aa2;
+            font-size: 20px;
+        }
+        .bonus-gate-body{
+            padding: 6px 22px 18px;
+            color: #fff;
+            text-align: center;
+        }
+        .bonus-gate-body p{ margin: 6px 0; }
+        .bonus-gate-actions{
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 22px 22px;
+        }
+        .bonus-gate-actions button{
+            border: 1px solid rgba(255,0,64,0.55);
+            background: rgba(0,0,0,0.25);
+            color: #fff;
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-weight: 900;
+            cursor: pointer;
+            min-width: 160px;
+        }
+        .bonus-gate-actions button.primary{
+            background: linear-gradient(135deg, rgba(255,0,64,0.95), rgba(170,0,50,0.95));
+            border-color: rgba(255,0,64,0.75);
+        }
+        .bonus-gate-timer{
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        .bonus-gate-when{
+            opacity: .85;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">
+        <div style="font-size:18px;">🎮</div>
+        <div class="hint">
+          Ande: <span class="kbd">←</span> <span class="kbd">→</span> (ou <span class="kbd">A</span>/<span class="kbd">D</span>) ·
+          Pular: <span class="kbd">Espaço</span> · Entrar no tubo: <span class="kbd">↓</span> perto do tubo
+        </div>
+      </div>
+      <div class="badge" id="status">
+        <div>⭐</div><div class="hint"><b>Objetivo:</b> entra no tubo verdinho</div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <canvas id="c" width="960" height="540"></canvas>
+
+      <div class="controls" aria-hidden="true">
+        <div class="pad">
+          <div class="btn" id="btnLeft">←</div>
+          <div class="btn" id="btnRight">→</div>
+        </div>
+        <div class="btns">
+          <div class="btn wide" id="btnDown">↓</div>
+          <div class="btn" id="btnJump">⤒</div>
+        </div>
+      </div>
+
+      <dialog class="overlay" id="overlay">
+        <div class="card">
+          <div style="font-size:44px; filter: drop-shadow(0 10px 25px rgba(0,0,0,.5));">💘</div>
+          <h1 class="title">você quer namorar cmg tinki?</h1>
+          <p class="sub">ps: o “não” tá bugado (mentira) 😌</p>
+
+          <div class="btnrow" id="btnrow">
+            <button class="choice primary" id="yesBtn" type="button">Sim</button>
+            <button class="choice" id="sureBtn" type="button">Claro</button>
+            <button class="choice" id="noBtn" type="button" style="position:relative;">Não</button>
+          </div>
+          <div class="toast" id="toast"></div>
+          <div class="credits">Dica: se ela tentar clicar no “Não”… ele foge 😭</div>
+        </div>
+      </dialog>
+  </div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  const keys = { left:false, right:false, down:false, jump:false };
+  const setKey = (k,v)=>{ keys[k]=v; };
+
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowLeft','ArrowRight','ArrowDown','Space','KeyA','KeyD','KeyS'].includes(e.code)) e.preventDefault();
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') setKey('left', true);
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') setKey('right', true);
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') setKey('down', true);
+    if (e.code === 'Space') setKey('jump', true);
+  }, {passive:false});
+  window.addEventListener('keyup', (e) => {
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') setKey('left', false);
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') setKey('right', false);
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') setKey('down', false);
+    if (e.code === 'Space') setKey('jump', false);
+  });
+
+  function bindHold(id, onDown, onUp){
+    const el = document.getElementById(id);
+    const down = (e)=>{ e.preventDefault(); onDown(); };
+    const up = (e)=>{ e.preventDefault(); onUp(); };
+    el.addEventListener('pointerdown', down);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    el.addEventListener('pointerleave', up);
+  }
+  bindHold('btnLeft', ()=>setKey('left', true), ()=>setKey('left', false));
+  bindHold('btnRight', ()=>setKey('right', true), ()=>setKey('right', false));
+  bindHold('btnDown', ()=>setKey('down', true), ()=>setKey('down', false));
+  bindHold('btnJump', ()=>setKey('jump', true), ()=>setKey('jump', false));
+
+  const gravity = 0.9;
+  const groundY = H - 90;
+
+  const platforms = [
+    {x:0, y:groundY, w:W, h:90},
+    {x:220, y:groundY-70, w:140, h:18},
+    {x:430, y:groundY-120, w:140, h:18},
+    {x:640, y:groundY-70, w:140, h:18},
+  ];
+
+  const pipe = { x: 760, y: groundY-120, w: 90, h: 120, lipH: 18 };
+
+  const player = {
+    x: 90, y: groundY-120, w: 46, h: 56,
+    vx: 0, vy: 0,
+    speed: 6.2, jump: 16.5,
+    onGround: false,
+    facing: 1,
+    enterT: 0
+  };
+
+  let confetti = [];
+  let state = 'play'; // play | entering | proposal | accepted
+  const status = document.getElementById('status');
+
+  function rectsOverlap(a,b){
+    return a.x < b.x + b.w && a.x + a.w > b.x &&
+           a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  function collideAndResolve(p){
+    p.onGround = false;
+
+    p.x += p.vx;
+    for (const pl of platforms){
+      if (rectsOverlap(p, pl)){
+        if (p.vx > 0) p.x = pl.x - p.w;
+        else if (p.vx < 0) p.x = pl.x + pl.w;
+        p.vx = 0;
+      }
+    }
+
+    p.y += p.vy;
+    for (const pl of platforms){
+      if (rectsOverlap(p, pl)){
+        if (p.vy > 0){
+          p.y = pl.y - p.h;
+          p.vy = 0;
+          p.onGround = true;
+        } else if (p.vy < 0){
+          p.y = pl.y + pl.h;
+          p.vy = 0;
+        }
+      }
+    }
+
+    p.x = Math.max(0, Math.min(W - p.w, p.x));
+    if (p.y > H + 200){
+      p.x = 90; p.y = groundY-120; p.vx = 0; p.vy = 0; p.h = 56;
+    }
+  }
+
+  function nearPipe(){
+    const zone = { x: pipe.x - 18, y: pipe.y - 8, w: pipe.w + 36, h: pipe.h + 16 };
+    return rectsOverlap(player, zone) && player.onGround;
+  }
+
+  function startEnter(){
+    state = 'entering';
+    player.enterT = 0;
+    player.vx = 0; player.vy = 0;
+    player.x = pipe.x + (pipe.w - player.w)/2;
+    player.y = pipe.y - player.h + 6;
+    status.innerHTML = '<div>🟩</div><div class="hint"><b>Entrando no tubo…</b></div>';
+    setTimeout(()=>{ if (state === 'entering') showProposal(); }, 1800);
+  }
+
+  function showProposal(){
+    state = 'proposal';
+    const dlg = document.getElementById('overlay');
+    try { dlg.showModal(); } catch(e) { dlg.style.display = 'flex'; }
+    status.innerHTML = '<div>💘</div><div class="hint"><b>Momento importante…</b></div>';
+  }
+
+  function spawnConfetti(){
+    confetti = [];
+    for (let i=0;i<160;i++){
+      confetti.push({
+        x: Math.random()*W,
+        y: -20 - Math.random()*H*0.6,
+        vx: -2 + Math.random()*4,
+        vy: 2 + Math.random()*5,
+        r: 3 + Math.random()*4,
+        spin: -0.2 + Math.random()*0.4,
+        a: Math.random()*Math.PI*2
+      });
+    }
+  }
+
+  const toast = document.getElementById('toast');
+  const yesBtn = document.getElementById('yesBtn');
+  const sureBtn = document.getElementById('sureBtn');
+  const noBtn = document.getElementById('noBtn');
+  const btnrow = document.getElementById('btnrow');
+
+  function accept(msg){
+    if (state !== 'proposal') return;
+    state = 'accepted';
+    toast.textContent = msg;
+    spawnConfetti();
+    const dlg = document.getElementById('overlay');
+    // mantém aberto um tiquinho pra ela ver, depois fecha e deixa confete no jogo
+    setTimeout(()=>{ try { dlg.close(); } catch(e) { dlg.style.display='none'; } }, 900);
+    status.innerHTML = '<div>✨</div><div class="hint"><b>Ela disse SIM!</b> 🥹</div>';
+  }
+
+  yesBtn.addEventListener('click', ()=>accept('AAAAAAAAA 😭💘 Eu sabia!!!'));
+  sureBtn.addEventListener('click', ()=>accept('TINKI, EU TE AMO 😭💘 (claro que sim)'));
+
+  function moveNo(){
+    if (state !== 'proposal') return;
+    const rowRect = btnrow.getBoundingClientRect();
+    const maxX = rowRect.width - 110;
+    const x = 10 + Math.random()*Math.max(10, maxX);
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = '0px';
+
+    const lines = ['ihhh fugiu 😂','tenta de novo 😌','não tá pegando…','bug do sistema 👀','cê não vai clicar nele não 😭'];
+    toast.textContent = lines[Math.floor(Math.random()*lines.length)];
+  }
+  noBtn.addEventListener('pointerenter', moveNo);
+  noBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); moveNo(); });
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    const rr = Math.min(r, w/2, h/2);
+    ctx.moveTo(x+rr, y);
+    ctx.arcTo(x+w, y, x+w, y+h, rr);
+    ctx.arcTo(x+w, y+h, x, y+h, rr);
+    ctx.arcTo(x, y+h, x, y, rr);
+    ctx.arcTo(x, y, x+w, y, rr);
+    ctx.closePath();
+  }
+
+  function drawBackground(){
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0, 'rgba(255,0,80,0.10)');
+    g.addColorStop(0.45,'rgba(0,0,0,0.0)');
+    g.addColorStop(1,'rgba(0,0,0,0.55)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    ctx.globalAlpha = 0.75;
+    for (let i=0;i<70;i++){
+      const x = (i*137) % W;
+      const y = (i*71) % (H-120);
+      const s = 1 + (i%3);
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillRect(x, y, s, s);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPlatforms(){
+    for (const pl of platforms){
+      if (pl.y === groundY){
+        ctx.fillStyle = 'rgba(35, 42, 52, 1)';
+        ctx.fillRect(pl.x, pl.y, pl.w, pl.h);
+        ctx.fillStyle = 'rgba(255,0,80,.16)';
+        ctx.fillRect(pl.x, pl.y, pl.w, 3);
+      } else {
+        ctx.fillStyle = 'rgba(255,255,255,.08)';
+        roundRect(pl.x, pl.y, pl.w, pl.h, 10);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,0,80,.22)';
+        ctx.stroke();
+      }
+    }
+    ctx.fillStyle = 'rgba(255,215,0,.12)';
+    for (let x=0; x<W; x+=18){
+      ctx.fillRect(x, groundY+10+((x/18)%2)*6, 3, 3);
+    }
+  }
+
+  function drawPipe(){
+    ctx.fillStyle = 'rgba(0, 180, 90, 0.95)';
+    roundRect(pipe.x, pipe.y, pipe.w, pipe.h, 14);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(0, 210, 110, 0.95)';
+    roundRect(pipe.x-8, pipe.y, pipe.w+16, pipe.lipH, 14);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    roundRect(pipe.x+10, pipe.y+14, 12, pipe.h-26, 10);
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(0,0,0,.25)';
+    ctx.stroke();
+
+    if (state === 'play' && nearPipe()){
+      ctx.globalAlpha = 0.95;
+      ctx.fillStyle = 'rgba(0,0,0,.45)';
+      roundRect(pipe.x-140, pipe.y-64, 170, 44, 12);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.92)';
+      ctx.font = '700 16px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+      ctx.fillText('Aperta ↓ pra entrar', pipe.x-126, pipe.y-37);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function drawPlayer(){
+    const p = player;
+
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.ellipse(p.x+p.w/2, p.y+p.h+6, 18, 6, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,0,0,.6)';
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = 'rgba(255,50,70,.95)';
+    roundRect(p.x, p.y+18, p.w, p.h-18, 12);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(45,120,255,.92)';
+    roundRect(p.x+6, p.y+30, p.w-12, p.h-30, 10);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255,220,190,.95)';
+    roundRect(p.x+8, p.y, p.w-16, 28, 12);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255,50,70,.98)';
+    roundRect(p.x+6, p.y-2, p.w-12, 14, 10);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(0,0,0,.7)';
+    const ex = p.facing > 0 ? p.x+p.w-18 : p.x+12;
+    ctx.fillRect(ex, p.y+12, 4, 4);
+    ctx.fillRect(ex+6, p.y+12, 4, 4);
+
+    ctx.fillStyle = 'rgba(0,0,0,.55)';
+    ctx.fillRect(p.x+8, p.y+p.h-6, 12, 6);
+    ctx.fillRect(p.x+p.w-20, p.y+p.h-6, 12, 6);
+  }
+
+  function drawConfetti(){
+    if (state !== 'accepted') return;
+    for (const p of confetti){
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.04;
+      p.a += p.spin;
+      if (p.y > H+30) { p.y = -20; p.x = Math.random()*W; p.vy = 2 + Math.random()*5; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.a);
+      ctx.fillStyle = `hsla(${(p.x+p.y)%360}, 85%, 60%, 0.95)`;
+      ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+      ctx.restore();
+    }
+  }
+
+  function update(){
+    if (state === 'play'){
+      const targetVx = (keys.left ? -player.speed : 0) + (keys.right ? player.speed : 0);
+      player.vx = targetVx;
+      if (player.vx !== 0) player.facing = Math.sign(player.vx);
+
+      if (keys.jump && player.onGround){
+        player.vy = -player.jump;
+        player.onGround = false;
+      }
+      player.vy += gravity;
+      collideAndResolve(player);
+
+      if (keys.down && nearPipe()){
+        startEnter();
+      }
+    } else if (state === 'entering'){
+      player.enterT += 1;
+      const t = player.enterT;
+      player.y += 2.6;
+      if (t < 45){
+        player.h = Math.max(10, 56 - t*1.0);
+      }
+      if (t > 55){
+        showProposal();
+      }
+    }
+
+    ctx.clearRect(0,0,W,H);
+    drawBackground();
+    drawPlatforms();
+    drawPipe();
+    if (state !== 'proposal') drawPlayer();
+    drawConfetti();
+
+    requestAnimationFrame(update);
+  }
+  update();
+})();
+</script>
+</body>
+</html>
+
+</template>
+
+<script>
+(() => {
+  const btn = document.getElementById('bonusBtn');
+  const panel = document.getElementById('bonusPanel');
+  const close = document.getElementById('bonusClose');
+  const max = document.getElementById('bonusMax');
+  const iframe = document.getElementById('bonusIframe');
+  const tpl = document.getElementById('bonusGameTemplate');
+
+  const ensureGameLoaded = () => {
+    if (!iframe || !tpl) return;
+    if (iframe.dataset.loaded) return;
+    iframe.dataset.loaded = "1";
+    iframe.srcdoc = tpl.innerHTML.trim();
+  };
+
+  const open = () => { panel.classList.add('open'); ensureGameLoaded(); };
+  const hide = () => { panel.classList.remove('open'); panel.classList.remove('fullscreen'); if (max) max.textContent = 'Tela cheia ⛶'; };
+
+  const toggle = () => {
+    const willOpen = !panel.classList.contains('open');
+    panel.classList.toggle('open');
+    if (willOpen) ensureGameLoaded();
+  };
+
+  
+
+  // ========= BÔNUS: Gate (agora vs dia 11) =========
+  const gate = document.getElementById('bonusGateOverlay');
+  const gateClose = document.getElementById('bonusGateClose');
+  const playNowBtn = document.getElementById('bonusPlayNowBtn');
+  const play11Btn = document.getElementById('bonusPlay11Btn');
+  const openWhenReadyBtn = document.getElementById('bonusOpenWhenReadyBtn');
+  const gateDecision = document.getElementById('bonusGateDecision');
+  const gateCountdown = document.getElementById('bonusGateCountdown');
+  const timerEl = document.getElementById('bonusGateTimer');
+  const whenEl = document.getElementById('bonusGateWhen');
+
+  const LS_KEY = 'bonus_unlock_at_iso';
+  let tick = null;
+
+  function pad2(n){ return String(n).padStart(2,'0'); }
+  function formatWhen(d){
+    const dd = pad2(d.getDate());
+    const mm = pad2(d.getMonth()+1);
+    const hh = pad2(d.getHours());
+    const mi = pad2(d.getMinutes());
+    return `${dd}/${mm} às ${hh}:${mi}`;
+  }
+  function msToParts(ms){
+    const s = Math.max(0, Math.floor(ms/1000));
+    const days = Math.floor(s / 86400);
+    const hrs  = Math.floor((s % 86400) / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    const secs = s % 60;
+    return {days, hrs, mins, secs};
+  }
+  function getTargetDay11Midnight(){
+    const now = new Date();
+    let target = new Date(now.getFullYear(), now.getMonth(), 11, 0, 0, 0, 0);
+    if (now.getTime() >= target.getTime()){
+      target = new Date(now.getFullYear(), now.getMonth() + 1, 11, 0, 0, 0, 0);
+    }
+    return target;
+  }
+
+  function showGate(){
+    if (!gate) return;
+    gate.classList.add('show');
+    gate.setAttribute('aria-hidden','false');
+  }
+  function hideGate(){
+    if (!gate) return;
+    gate.classList.remove('show');
+    gate.setAttribute('aria-hidden','true');
+    if (tick){ clearInterval(tick); tick = null; }
+  }
+
+  function setGateMode(mode, unlockAt){
+    if (!gateDecision || !gateCountdown || !playNowBtn || !play11Btn || !openWhenReadyBtn) return;
+
+    if (mode === 'decision'){
+      gateDecision.style.display = '';
+      gateCountdown.style.display = 'none';
+      playNowBtn.style.display = '';
+      play11Btn.style.display = '';
+      openWhenReadyBtn.style.display = 'none';
+    }
+    if (mode === 'countdown'){
+      gateDecision.style.display = 'none';
+      gateCountdown.style.display = '';
+      playNowBtn.style.display = '';
+      play11Btn.style.display = 'none';
+      openWhenReadyBtn.style.display = 'none';
+      if (unlockAt && whenEl) whenEl.textContent = `Libera em ${formatWhen(unlockAt)}`;
+    }
+    if (mode === 'ready'){
+      gateDecision.style.display = 'none';
+      gateCountdown.style.display = '';
+      playNowBtn.style.display = 'none';
+      play11Btn.style.display = 'none';
+      openWhenReadyBtn.style.display = '';
+      if (timerEl) timerEl.textContent = 'AGORA! 🎉';
+      if (whenEl) whenEl.textContent = 'Pode abrir o bônus quando quiser 💖';
+    }
+  }
+
+  function getStoredUnlockAt(){
+    try{
+      const iso = localStorage.getItem(LS_KEY);
+      if (!iso) return null;
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return null;
+      return d;
+    }catch(e){ return null; }
+  }
+
+  function startCountdown(unlockAt){
+    showGate();
+    setGateMode('countdown', unlockAt);
+
+    const update = () => {
+      const now = new Date();
+      const left = unlockAt.getTime() - now.getTime();
+      if (left <= 0){
+        try{ localStorage.removeItem(LS_KEY); }catch(e){}
+        setGateMode('ready', unlockAt);
+        if (tick){ clearInterval(tick); tick = null; }
+        return;
+      }
+      const {days, hrs, mins, secs} = msToParts(left);
+      const t = days > 0 ? `${days}d ${pad2(hrs)}:${pad2(mins)}:${pad2(secs)}`
+                         : `${pad2(hrs)}:${pad2(mins)}:${pad2(secs)}`;
+      if (timerEl) timerEl.textContent = t;
+    };
+
+    update();
+    if (tick) clearInterval(tick);
+    tick = setInterval(update, 1000);
+  }
+
+  function handleBonusClick(){
+    const stored = getStoredUnlockAt();
+    const now = new Date();
+
+    if (stored && now.getTime() >= stored.getTime()){
+      try{ localStorage.removeItem(LS_KEY); }catch(e){}
+      open();
+      return;
+    }
+    if (stored && now.getTime() < stored.getTime()){
+      startCountdown(stored);
+      return;
+    }
+
+    showGate();
+    setGateMode('decision');
+  }
+
+  gateClose?.addEventListener('click', hideGate);
+  gate?.addEventListener('click', (e) => { if (e.target === gate) hideGate(); });
+
+  playNowBtn?.addEventListener('click', () => {
+    hideGate();
+    open();
+  });
+
+  play11Btn?.addEventListener('click', () => {
+    const target = getTargetDay11Midnight();
+    try{ localStorage.setItem(LS_KEY, target.toISOString()); }catch(e){}
+    startCountdown(target);
+  });
+
+  openWhenReadyBtn?.addEventListener('click', () => {
+    hideGate();
+    open();
+  });
+
+btn?.addEventListener('click', handleBonusClick);
+  close?.addEventListener('click', hide);
+
+  const toggleFull = () => {
+    panel.classList.toggle('fullscreen');
+    if (max) max.textContent = panel.classList.contains('fullscreen') ? 'Voltar ↙' : 'Tela cheia ⛶';
+  };
+  max?.addEventListener('click', toggleFull);
+
+  // fecha ao clicar fora (sem atrapalhar clique no iframe)
+  document.addEventListener('mousedown', (e) => {
+    if (!panel.classList.contains('open')) return;
+    const t = e.target;
+    if (panel.contains(t) || (btn && btn.contains(t))) return;
+    hide();
+  });
+
+  // ESC fecha
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { panel.classList.remove('fullscreen'); if (max) max.textContent = 'Tela cheia ⛶'; hide(); }
+  });
+})();
+</script>
+
+</body>
+</html>
